@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Catalog{% endblock %}
+
+{% block stylee %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: rgb(253, 250, 251);
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: white;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 250px;
+        }
+
+        .category-list {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+            width: 100%;
+        }
+
+        .nav-item {
+            position: relative;
+            padding: 12px 15px;
+            background: white;
+            border-bottom: 1px solid #ddd;
+            width: 100%;
+            text-align: left;
+            font-size: 18px;
+            color: black;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .nav-item a {
+            text-decoration: none;
+            color: black;
+        }
+
+        .sub-dropdown {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: white;
+            border: 1px solid #ddd;
+            padding: 5px;
+            border-radius: 5px;
+            min-width: 200px;
+            z-index: 1000;
+            box-shadow: 0px 4px 6px rgba(216, 213, 213, 0.1);
+        }
+
+        .sub-dropdown ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .sub-dropdown ul li {
+            padding: 10px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-size: 16px;
+            color: black;
+            background: white;
+            position: relative; /* Ensure position for child dropdowns */
+        }
+
+        .sub-dropdown ul li:hover {
+            background-color: #f3f3f3;
+        }
+
+        /* Ensure deeper subcategories are shown properly */
+        .sub-dropdown ul li:hover > .sub-dropdown {
+            display: block;
+        }
+
+        /* First level hover effect */
+        .nav-item:hover > .sub-dropdown {
+            display: block;
+        }
+    </style>
+{% endblock %}
+
+
+
+{% block content %}
+    <nav class="navbar">
+        <div class="category-list">
+            {% for category in categories %}
+                {% if not category.parent %}
+                    <div class="nav-item">
+                        {% if category.subcategories.all %}
+                            {{ category.name }}
+                            <div class="sub-dropdown">
+                                <ul>
+                                    {% for subcategory in category.subcategories.all %}
+                                        <li>
+                                            {% if subcategory.subcategories.all %}
+                                                {{ subcategory.name }}
+                                                <div class="sub-dropdown">
+                                                    <ul>
+                                                        {% for subsub in subcategory.subcategories.all %}
+                                                            <li>
+                                                                {% if subsub.subcategories.all %}
+                                                                    {{ subsub.name }}
+                                                                    <div class="sub-dropdown">
+                                                                        <ul>
+                                                                            {% for subsubsub in subsub.subcategories.all %}
+                                                                                <li>
+                                                                                    <a href="{% url 'catalog:subcategory_detail' subsubsub.id %}">{{ subsubsub.name }}</a>
+                                                                                </li>
+                                                                            {% endfor %}
+                                                                        </ul>
+                                                                    </div>
+                                                                {% else %}
+                                                                    <a href="{% url 'catalog:subcategory_detail' subsub.id %}">{{ subsub.name }}</a>
+                                                                {% endif %}
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            {% else %}
+                                                <a href="{% url 'catalog:subcategory_detail' subcategory.id %}">{{ subcategory.name }}</a>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% else %}
+                            <a href="{% url 'catalog:subcategory_detail' category.id %}">{{ category.name }}</a> 
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </nav>
+    {% endblock %}

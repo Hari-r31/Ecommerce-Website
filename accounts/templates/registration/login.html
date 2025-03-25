@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        /* Header Styles */
+        .header {
+            width: 100%;
+            background: #435a6d;
+            padding: 15px 20px;
+            text-align: left;
+            position: fixed;
+            top: 0;
+            left: 0;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header a {
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .back-button-container {
+            width: 100%;
+            display: flex;
+            justify-content: flex-start;
+            padding: 15px 20px;
+            margin-top: -100px; /* Adjusted spacing to avoid header overlap */
+        }
+
+        .back-button {
+            padding: 8px 12px;
+            background: #ccc;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        .back-button:hover {
+            background: #999;
+        }
+
+        .login-container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            width: 320px;
+            text-align: center;
+        }
+
+        .login-container h2 {
+            margin-bottom: 15px;
+            font-size: 22px;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .login-button {
+            background-color: #435a6d;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .login-button:hover {
+            background-color: #0056b3;
+        }
+
+        .register-link {
+            margin-top: 12px;
+            display: block;
+            color: #435a6d;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+
+        .message-container {
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            background: #ffe6e6;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            background: #e6ffe6;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: #fff;
+            padding: 10px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        footer a {
+            color: #435a6d;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 14px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="{% url 'home' %}">Ecommerce</a>
+    </header>
+
+    <!-- Back to Home Button (Now Between Header and Login Container) -->
+    <div class="back-button-container">
+        <a href="{% url 'home' %}" class="back-button">← Back to Home</a>
+    </div>
+
+    <div class="login-container">
+        {% if user.is_authenticated %}
+            <h2>Welcome, {{ user.username }}!</h2>
+            <a href="{% url 'accounts:logout' %}" class="login-button">Logout</a>
+        {% else %}
+            <h2>Login</h2>
+
+            {% if messages %}
+                <div class="message-container">
+                    {% for message in messages %}
+                        <p class="{% if message.tags == 'success' %}success-message{% else %}error-message{% endif %}">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{% url 'accounts:login_register' %}">
+                {% csrf_token %}
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-button">Login</button>
+            </form>
+
+            <a href="{% url 'accounts:register' %}" class="register-link">Don't have an account? Register</a>
+            <a href="{% url 'accounts:password_reset_request' %}" class="register-link">Forgot Password?</a>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>© 2025 Ecommerce - Redefining Online Shopping</p>
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Careers</a>
+    </footer>
+</body>
+</html>

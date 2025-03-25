@@ -1,0 +1,26 @@
+{% for category in categories %}
+    <li class="nav-item">
+        <a href="{% url 'catalog:subcategory_detail' category.id %}">{{ category.name }}</a>
+
+        {% if category.subcategories.all %}
+            <div class="sub-dropdown">
+                <ul>
+                    {% include 'catalog/category_list.html' with categories=category.subcategories.all %}
+                </ul>
+            </div>
+        {% else %}
+            <!-- If this is the last-level subcategory, display its items -->
+            {% with category.items.all as items %}
+                {% if items %}
+                    <ul>
+                        {% for item in items %}
+                            <li>
+                                <a href="{% url 'catalog:item_detail' item.id %}">{{ item.name }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        {% endif %}
+    </li>
+{% endfor %}

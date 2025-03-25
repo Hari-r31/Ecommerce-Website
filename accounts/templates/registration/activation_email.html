@@ -1,0 +1,5 @@
+Hi {{ user.username }},
+Please click the link below to activate your account:
+<a href="{{ protocol }}://{{ domain }}{% url 'accounts:activate' uidb64=uid token=token %}">Activate your account</a>
+
+Thank you!
