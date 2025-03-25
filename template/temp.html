@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALLMART - Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            color: white;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .auth-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .auth-button:hover {
+            background-color: #218838;
+        }
+
+        .dashboard-buttons {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+
+        .dashboard-button {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 200px;
+            margin: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .dashboard-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-button h2 {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+
+        .dashboard-button p {
+            font-size: 0.9rem;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">ALLMART</div>
+        <div class="auth">
+            <button id="loginBtn">Login</button>
+            <button id="registerBtn">Register</button>
+            <div id="profileDropdown" class="hidden">
+                <img id="profilePic" src="profile.jpg" alt="Profile" onclick="toggleDropdown()">
+                <div id="dropdownMenu" class="dropdown hidden">
+                    <p>Account Details</p>
+                    <button onclick="logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Header -->
+    <section class="hero-section">
+        <h1>Welcome to ALLMART</h1>
+        <p>Discover Amazing Products at Unbeatable Prices</p>
+        <button class="auth-button" style="margin-top: 1.5rem;">Start Shopping</button>
+    </section>
+
+    <div class="dashboard-buttons">
+        <a href="#" class="dashboard-button">
+            <h2>🛍️ Product Catalog</h2>
+            <p>Explore thousands of curated products</p>
+        </a>
+        <a href="#" class="dashboard-button">
+            <h2>📩 My Enquiries</h2>
+            <p>Manage your product inquiries</p>
+        </a>
+        <a href="#" class="dashboard-button" id="cart-button">
+            <h2>🛒 My Cart</h2>
+            <p>Review your shopping basket</p>
+        </a>
+        <a href="#" class="dashboard-button">
+            <h2>💬 Support</h2>
+            <p>24/7 Customer assistance</p>
+        </a>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 ALLMART. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let isLoggedIn = false; // Simulated login state
+        const authButton = document.querySelector(".auth-button");
+
+        authButton.addEventListener("click", function() {
+            window.location.href = "#";
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const cartButton = document.getElementById('cart-button');
+            cartButton.addEventListener('click', function() {
+                alert('Cart functionality is not implemented yet.');
+            });
+        });
+    </script>
+</body>
+</html>

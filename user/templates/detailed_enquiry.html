@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Enquiry Details{% endblock %}
+
+{% block stylee %}
+<style>
+    .container {
+        max-width: 100%;
+        margin: 20px auto;
+        padding: 20px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .item-details {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .item-image {
+        width: 30%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .details-section {
+        display: flex;
+        gap: 20px;
+        justify-content: space-between;
+    }
+
+    .box {
+        flex: 1;
+        padding: 15px;
+        background: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .status {
+        font-weight: bold;
+    }
+
+    .pending {
+        color: orange;
+    }
+
+    .responded {
+        color: green;
+    }
+
+    .back-btn {
+        display: block;
+        margin-top: 20px;
+        text-align: center;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .back-btn:hover {
+        background: #0056b3;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Enquiry Details</h1>
+
+    <!-- Item Details -->
+    <div class="item-details">
+        {% if inquiry.item.photos %}
+            <img src="{{ inquiry.item.photos.url }}" alt="{{ inquiry.item.name }}" class="item-image">
+        {% else %}
+            <img src="https://via.placeholder.com/800" alt="Placeholder" class="item-image">
+        {% endif %}
+        <h2>{{ inquiry.item.name }}</h2>
+        <p>{{ inquiry.item.description }}</p>
+    </div>
+
+    <!-- Inquiry & Vendor Response -->
+    <div class="details-section">
+        <!-- Inquiry Details -->
+        <div class="box">
+            <h3>Your Inquiry</h3>
+            <p><strong>Name:</strong> {{ inquiry.name }}</p>
+            <p><strong>Phone:</strong> {{ inquiry.phone }}</p>
+            <p><strong>Email:</strong> {{ inquiry.email }}</p>
+            <p><strong>Address:</strong> {{ inquiry.address }}</p>
+            <p><strong>City:</strong> {{ inquiry.city }}</p>
+            <p><strong>State:</strong> {{ inquiry.state }}</p>
+            <p><strong>Country:</strong> {{ inquiry.country }}</p>
+            <p><strong>Message:</strong> {{ inquiry.message }}</p>
+            <p><strong>Status:</strong> 
+                <span class="status {% if inquiry.response %}responded{% else %}pending{% endif %}">
+                    {% if inquiry.response %}
+                        Responded
+                    {% else %}
+                        Pending
+                    {% endif %}
+                </span>
+            </p>
+        </div>
+
+        <!-- Vendor Response -->
+        <div class="box">
+            <h3>Vendor Response</h3>
+            {% if inquiry.response %}
+                <p>{{ inquiry.response }}</p>
+            {% else %}
+                <p><em>Awaiting response...</em></p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <a href="{% url 'user:my_inquiries' %}" class="back-btn">⬅ Back to My Inquiries</a>
+</div>
+{% endblock %}

@@ -1,0 +1,231 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecommerce</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #435a6d;
+            color: white;
+            padding: 15px 20px;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .auth-buttons {
+            display: flex;
+            align-items: center;
+        }
+
+        .btn {
+            background-color: #6aabf5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-left: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #C3003A;
+        }
+
+        /* Profile Menu */
+        .profile-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            min-width: 150px;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #ddd;
+        }
+
+        .hero-section {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(to right, #d4a53e, #94c4eb);
+            color: white;
+        }
+
+        .hero-section h1 {
+            font-size: 2.5rem;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+        }
+
+        .dashboard-buttons {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 20px;
+        }
+
+        .dashboard-button {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 200px;
+            margin: 10px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-decoration: none;
+            color: #1F4F82;
+            font-weight: bold;
+        }
+
+        .dashboard-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            border-color: #080808;
+        }
+
+        footer {
+            background-color: #435a6d;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            width: 100%;
+        }
+
+        footer a {
+            color: #faf7f7;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body data-user-authenticated="{{ user.is_authenticated|yesno:'true,false' }}">
+
+    <header>
+        <div class="logo">Ecommerce</div>
+        <div class="auth-buttons">
+            {% if user.is_authenticated %}
+                <div class="profile-menu">
+                    <img src="{% if user.profile.picture %}{{ user.profile.picture.url }}{% else %}{% static 'images/default_profile.jpg' %}{% endif %}" 
+     alt="Profile" class="profile-pic" onclick="toggleDropdown()">
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="{% url 'user:account_details' %}">My Account</a>
+                        <a href="{% url 'accounts:logout' %}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'accounts:login_register' %}" class="btn">Login</a>
+                <a href="{% url 'accounts:register' %}" class="btn register">Register</a>
+            {% endif %}
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <h1>Welcome to Ecommerce</h1>
+        <p>Discover Amazing Products at Unbeatable Prices</p>
+    </section>
+
+    <div class="dashboard-buttons">
+        <a href="{% url 'catalog:catalog' %}" class="dashboard-button">
+            <h2>🛍️ Product Catalog</h2>
+            <p>Explore thousands of curated products</p>
+        </a>
+        <a href="{% url 'user:my_inquiries' %}" class="dashboard-button" id="my-inquiries">
+            <h2>📩 My Enquiries</h2>
+            <p>Manage your product inquiries</p>
+        </a>
+        <a href="#" class="dashboard-button" id="my-cart">
+            <h2>🛒 My Cart</h2>
+            <p>Review your shopping basket</p>
+        </a>
+        <a href="#" class="dashboard-button">
+            <h2>💬 Support</h2>
+            <p>24/7 Customer assistance</p>
+        </a>
+    </div>
+
+    <footer>
+        <p>© 2025 Ecommerce - Redefining Online Shopping</p>
+        <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Careers</a>
+    </footer>
+
+    <script>
+        function checkLogin(event) {
+            let isAuthenticated = document.body.getAttribute("data-user-authenticated") === "true";
+            if (!isAuthenticated) {
+                event.preventDefault();
+                alert("Please log in to access this feature.");
+            }
+        }
+
+        document.getElementById("my-inquiries").addEventListener("click", checkLogin);
+        document.getElementById("my-cart").addEventListener("click", checkLogin);
+
+        function toggleDropdown() {
+            var menu = document.getElementById("dropdownMenu");
+            menu.style.display = menu.style.display === "block" ? "none" : "block";
+        }
+
+        window.addEventListener("click", function(event) {
+            if (!event.target.closest('.profile-menu')) {
+                var menu = document.getElementById("dropdownMenu");
+                if (menu) menu.style.display = "none";
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Item</title>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const categorySelect = document.getElementById("id_category");
+            const newCategoryInput = document.getElementById("id_new_category");
+            const subcategorySelect = document.getElementById("id_subcategory");
+            const newSubcategoryInput = document.getElementById("id_new_subcategory");
+
+            function toggleCategoryFields() {
+                newCategoryInput.disabled = !!categorySelect.value;
+                if (categorySelect.value) newCategoryInput.value = "";
+            }
+
+            function toggleCategorySelect() {
+                categorySelect.disabled = !!newCategoryInput.value.trim();
+                if (newCategoryInput.value.trim()) categorySelect.value = "";
+            }
+
+            function toggleSubcategoryFields() {
+                newSubcategoryInput.disabled = !!subcategorySelect.value;
+                if (subcategorySelect.value) newSubcategoryInput.value = "";
+            }
+
+            function toggleSubcategorySelect() {
+                subcategorySelect.disabled = !!newSubcategoryInput.value.trim();
+                if (newSubcategoryInput.value.trim()) subcategorySelect.value = "";
+            }
+
+            categorySelect.addEventListener("change", toggleCategoryFields);
+            newCategoryInput.addEventListener("input", toggleCategorySelect);
+            subcategorySelect.addEventListener("change", toggleSubcategoryFields);
+            newSubcategoryInput.addEventListener("input", toggleSubcategorySelect);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Add New Item</h2>
+
+        <form method="post" enctype="multipart/form-data" class="form-container">
+            {% csrf_token %}
+
+            {% if form.errors %}
+                <div class="error-box">
+                    <strong>Errors:</strong>
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                <li>{{ field|capfirst }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <label>Select Category:</label>
+            {{ form.category }}
+
+            <label>Or Add New Category:</label>
+            {{ form.new_category }}
+
+            <label>Select Subcategory:</label>
+            {{ form.subcategory }}
+
+            <label>Or Add New Subcategory:</label>
+            {{ form.new_subcategory }}
+
+            {{ form.name.label }} {{ form.name }}
+            {{ form.description.label }} {{ form.description }}
+            {{ form.specification.label }} {{ form.specification }}
+            {{ form.photos.label }} {{ form.photos }}
+            {{ form.videos.label }} {{ form.videos }}
+            {{ form.custom_fields.label }} {{ form.custom_fields }}
+            {{ form.published.label }} {{ form.published }}
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>

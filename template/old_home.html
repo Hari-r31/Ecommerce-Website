@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce</title>
+    <link rel="stylesheet" href="{% static 'base.css' %}">
+</head>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .hero-section {
+        text-align: center;
+        padding: 50px 20px;
+        background: linear-gradient(to right, #ff7e5f, #feb47b);
+        color: white;
+    }
+
+    .hero-section h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .hero-section p {
+        font-size: 1.2rem;
+        margin-bottom: 20px;
+    }
+
+    .auth-button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+    }
+
+    .auth-button:hover {
+        background-color: #218838;
+    }
+
+    .dashboard-buttons {
+        display: flex;
+        justify-content: space-around;
+        flex-wrap: wrap;
+        margin: 20px;
+    }
+
+    .dashboard-button {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        width: 200px;
+        margin: 10px;
+        transition: transform 0.3s, box-shadow 0.3s;
+        text-decoration: none;
+        color: #333;
+    }
+
+    .dashboard-button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .dashboard-button h2 {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+
+    .dashboard-button p {
+        font-size: 0.9rem;
+    }
+</style>
+<body>
+
+<!-- Header Section -->
+<header>
+    <div class="top-bar">
+        <div class="logo">
+            <img src="{% static 'images/logo.jpg' %}" alt="Logo">
+            <span>E-Commerce</span>
+        </div>
+        <div class="auth-buttons">
+            {% if user.is_authenticated %}
+                <div class="profile-menu">
+                    <img src="{% static 'images/profile.jpg' %}" alt="Profile" class="profile-pic" onclick="toggleDropdown()">
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <a href="{% url 'user:account_details' %}">My Account</a>
+                        <a href="#">My Enquiries</a>
+                        <a href="{% url 'accounts:logout' %}">Logout</a>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{% url 'accounts:login_register' %}" class="btn">Login</a>
+                <a href="{% url 'accounts:register' %}" class="btn register">Register</a>
+            {% endif %}
+        </div>
+        
+    </div>
+
+    <!-- Navigation Links (Next Line) -->
+    <nav>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="#">Search</a></li>
+            <li><a href="{% url 'catalog:catalog' %}">Catalog</a></li>
+            <li><a href="{% url 'user:my_inquiries' %}">My Enquiries</a></li>
+        </ul>
+    </nav>
+</header>
+
+<!-- Home Page Content -->
+<main>
+
+        
+    
+        <section class="hero-section">
+            <h1>Welcome to ALLMART</h1>
+            <p>Discover Amazing Products at Unbeatable Prices</p>
+            <button id="authButton" class="auth-button" style="margin-top: 1.5rem;">Start Shopping</button>
+        </section>
+    
+        <div class="dashboard-buttons">
+            <a href="{% url 'catalog:catalog' %}" class="dashboard-button">
+                <h2>🛍️ Product Catalog</h2>
+                <p>Explore thousands of curated products</p>
+            </a>
+            <a href="{% url 'user:my_inquiries' %}" class="dashboard-button">
+                <h2>📩 My Enquiries</h2>
+                <p>Manage your product inquiries</p>
+            </a>
+            <a href="#" class="dashboard-button" id="cart-button">
+                <h2>🛒 My Cart</h2>
+                <p>Review your shopping basket</p>
+            </a>
+            <a href="#" class="dashboard-button">
+                <h2>💬 Support</h2>
+                <p>24/7 Customer assistance</p>
+            </a>
+        </div>
+    
+        
+</main>
+<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const authButton = document.getElementById("authButton");
+                const cartButton = document.getElementById("cart-button");
+                let isLoggedIn = false; // Simulated login state
+    
+                function updateAuthButton() {
+                    authButton.textContent = isLoggedIn ? "Profile" : "Login/Register";
+                }
+    
+                authButton.addEventListener("click", function() {
+                    if (isLoggedIn) {
+                        window.location.href = "/accounts/profile/";
+                    } else {
+                        window.location.href = "/accounts/login_register/";
+                    }
+                });
+    
+                cartButton.addEventListener("click", function() {
+                    alert("Cart functionality is not implemented yet.");
+                });
+    
+                updateAuthButton();
+            });
+
+    function toggleDropdown() {
+        var menu = document.getElementById("dropdownMenu");
+        menu.classList.toggle("show");
+    }
+
+    // Close dropdown when clicking outside
+    window.onclick = function(event) {
+        if (!event.target.matches('.profile-pic')) {
+            var dropdowns = document.getElementsByClassName("dropdown-menu");
+            for (var i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
+
+</body>
+</html>

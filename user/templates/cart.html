@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Wishlist{% endblock %}
+
+{% block stylee %}
+{% endblock %}
+
+
+
+{% block content %}
+    <h1>Your Enquiry List</h1>
+    <ul>
+        {% for cart_item in cart_items %}
+            <li>
+                <img src="{{ cart_item.item.photos.url }}" alt="{{ cart_item.item.name }}" width="100">
+                <strong>{{ cart_item.item.name }}</strong> 
+                <p>{{ cart_item.item.description }}</p>
+                <p>Quantity: {{ cart_item.quantity }}</p>
+            </li>
+        {% empty %}
+            <li>No items in your enquiry cart.</li>
+        {% endfor %}
+    </ul>
+
+    {% endblock %}
